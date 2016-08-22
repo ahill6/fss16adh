@@ -1,2 +1,4 @@
-import utest
+import utest, hill
 
+utest.oks()
+hill.printname()

@@ -14,7 +14,7 @@ For more on this kind of tool, see
 https://www.youtube.com/watch?v=nIonZ6-4nuU
 """
 from __future__ import division,print_function
-import sys,re,traceback,random, Hill
+import sys,re,traceback,random, hill
 sys.dont_write_bytecode=True
 
 PASS=FAIL=0
@@ -37,6 +37,7 @@ def ok(f):
   except Exception,e:
       FAIL += 1
       print(traceback.format_exc()) 
+      print("# fail")
   return f
 
 
@@ -83,11 +84,8 @@ def _any3():
   print("")
   
 @ok
-def last():
-  #Hill.repeat(Hill.test5,3)
-  #Hill.question("What is your quest?")
-  result = Hill.isbackward("stop", "pots")
-  print(result)
-  assert 1==1
-  
-oks()
+def _randomworking():
+  """ Check that two generated random numbers are distinct"""
+  x = random.random()
+  y = random.random()
+  assert x != y
