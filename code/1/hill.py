@@ -1,22 +1,12 @@
 def printname():
-    try:
-      print("Andrew Hill")
-      return True
-    except:
-      return False
+  print("Andrew Hill")
 
-
-"""      
-def functioncallcheck():
-  try:
-    return True
-  except:
-    return False
-
+"""
 def repeat(f,n):
   for i in xrange(n):
     f()
-    
+"""
+
 def isbackward(a, b):
   if len(a) != len(b):
     return False
@@ -27,8 +17,7 @@ def isbackward(a, b):
       return False
     index+=1
   return True
-"""  
-  
+
   
   
   

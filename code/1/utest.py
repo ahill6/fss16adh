@@ -59,6 +59,16 @@ def any3(lst,a=None,b=None,c=None,it = same,retries=10):
   if it(a) == it(c) or it(b) == it(c):
     return any3(lst,a=a,b=b,it=it,retries=retries - 1)
   return a,b,c
+  
+def returnedvalue(f, n):
+  result = f()
+  if result==n:
+    return True
+  else:
+    return False
+    
+def equality(a, b):
+  return a==b
 
 @ok
 def _ok1():
@@ -82,10 +92,12 @@ def _any3():
   for k,v in seen.items():
     assert v < 2
   print("")
-  
+
 @ok
-def _randomworking():
-  """ Check that two generated random numbers are distinct"""
+def _equalitycheck():
+  """ Check that the 'same' helper function works  """
   x = random.random()
-  y = random.random()
-  assert x != y
+  y = same(x)
+  assert equality(x, y)
+  
+oks()
