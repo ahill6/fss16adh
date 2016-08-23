@@ -60,8 +60,8 @@ def any3(lst,a=None,b=None,c=None,it = same,retries=10):
     return any3(lst,a=a,b=b,it=it,retries=retries - 1)
   return a,b,c
   
-def returnedvalue(f, n):
-  result = f()
+def functiontest(f, n, *args):
+  result = f(*args)
   if result==n:
     return True
   else:
@@ -92,12 +92,12 @@ def _any3():
   for k,v in seen.items():
     assert v < 2
   print("")
-
+  
 @ok
-def _equalitycheck():
-  """ Check that the 'same' helper function works  """
-  x = random.random()
-  y = same(x)
-  assert equality(x, y)
+def _returnedvaluetest():
+  """ Test that the generalized function tester works"""
+  assert functiontest(equality, True, 1, 1)
+  #assert functiontest(hill.isbackward, True, "stop", "pots")
+  #assert functiontest(hill.isbackward, False, "stop", "job")
   
 oks()
