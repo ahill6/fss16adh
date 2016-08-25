@@ -1,3 +1,5 @@
 import utest, hill
 
-hill.printname()
+@utest.ok
+def _check_is_backward():
+    assert hill.isbackward("stop", "pots")

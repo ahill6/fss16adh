@@ -12,7 +12,7 @@ def isbackward(a, b):
     return False
   index = 0
   while index < len(a):
-    print index, a[index], b[-index]
+    #print index, a[index], b[-index]
     if a[index] != b[(len(b)-1)-index]:
       return False
     index+=1
