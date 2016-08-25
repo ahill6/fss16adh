@@ -1,13 +1,13 @@
 ##Antonio Filieri, Carlo Ghezzi, Alberto Leva, and Martina Maggio. 2011. Self-adaptive software meets control theory: A preliminary approach supporting reliability requirements. In Proceedings of the 2011 26th IEEE/ACM International Conference on Automated Software Engineering (ASE '11). IEEE Computer Society, Washington, DC, USA, 283-292. DOI=http://dx.doi.org/10.1109/ASE.2011.6100064
 
 ### ii. Keywords
-ii1: Discrete Time Markov Chain (DTMC) - 
+ii1: Discrete Time Markov Chain (DTMC) - A Markov Chain is a particular way of modeling random behavior between different states.  One which operates over discrete time means precisely that the time variable is discrete (i.e. events occur at distinct points in time/at given intervals).  This is sometimes contrasted with a "Markov Process" or Continuous Time Markov Chain.
 
-ii2: Probabilistic Computational Tree Logic (PCTL) - 
+ii2: Probabilistic Computational Tree Logic (PCTL) - A tree-based logic model that allows for probabilistic transition between states.  Often used for formal verification and similar problems.
 
-ii3: Finite State Machine (FSM) - 
+ii3: Finite State Machine (FSM) - An abstraction of a computational machine which has a set of states and a transition function to move from one state to another.  In the case of this paper, the addition of randomness (DTMC) makes the machine non-deterministic.
 
-ii4: Dynamic System - 
+ii4: Dynamic System - A system with sensitive dependence on an input (most often time).  Generally this means that a slight pertubation at a given point can result in radically different behavior.
 
 ### iii. A Few Notes
 iii1: Motivation - This paper suggests a new means of creating self-adaptive software that can maintain compliance with a given (possibly changing) set of reliability requirements within a limited setting.
@@ -20,8 +20,8 @@ iii4: Future Work - This paper only applies to one type of model (DTMC), to opti
 
 
 ### iv. Weaknesses
-iv1: Diction/grammar - On the whole the paper had good grammar and used words appropriately, but some portions had grammar/spelling errors which distracted from the text - particularly in section 5.  A proofreader could have prevented this.
+iv1: 
 
-iv2: Sets a very broad agenda in multiple areas - The purpose of the paper is to set an agenda for future work, so to some extent broad strokes are expected.  However, the paper loses a bit of focus as it addresses philosophy of science (empiricism vice experimentalism), and describes multiple distinct potential research areas without any discussion of how (or whether) research in each could interact.
+iv2: 
 
-iv3: Even an agenda paper needs to suggest a future direction - On the whole, the paper offers very little in the way of concrete suggestions, preferring to simply point out the problems.  The exception to this critique is the section on synthetic data.
+iv3: 
