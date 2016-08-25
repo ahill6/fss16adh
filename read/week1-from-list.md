@@ -1,22 +1,22 @@
 ##Antonio Filieri, Carlo Ghezzi, Alberto Leva, and Martina Maggio. 2011. Self-adaptive software meets control theory: A preliminary approach supporting reliability requirements. In Proceedings of the 2011 26th IEEE/ACM International Conference on Automated Software Engineering (ASE '11). IEEE Computer Society, Washington, DC, USA, 283-292. DOI=http://dx.doi.org/10.1109/ASE.2011.6100064
 
 ### ii. Keywords
-ii1: Discrete Time Markov Chain - 
+ii1: Discrete Time Markov Chain (DTMC) - 
 
-ii2: PCTL (Probabilistic Computational Tree Logic) - 
+ii2: Probabilistic Computational Tree Logic (PCTL) - 
 
-ii3: Finite State Machine - 
+ii3: Finite State Machine (FSM) - 
 
 ii4: Dynamic System - 
 
 ### iii. A Few Notes
-iii1: Motivation - 
+iii1: Motivation - This paper suggests a new means of creating self-adaptive software that can maintain compliance with a given (possibly changing) set of reliability requirements within a limited setting.
 
-iii2: New Results - 
+iii2: New Results - The self-adaptation is accomplished by using a feedback loop to control for the dynamic system.  This feedback loop is discussed theoretically and implemented in the form of a FSM which represents a DTMC model.
 
-iii3: Patterns - Sections 5 and 6 are devoted to discussing circumstances under which the use of synthetic data is most appropriate and beneficial.  In addition to a general overview, specific examples of appropriate cases and the type of questions that should be asked are provided.
+iii3: Mathematical Foundation - The paper discusses the general form of a dynamic system, then goes through a modification of it to account for real world behavior (e.g. approximation of values, external influence on the system).  It then gives a description of the mathematics behind setpoints in this context and discusses the appropriate error norms for the optimization problem.
 
-iii4: Future Work - 
+iii4: Future Work - This paper only applies to one type of model (DTMC), to optimizing one type of requirement (reliability expressed in a certain way), etc.  Generalization of any/all of these is needed.
 
 
 ### iv. Weaknesses
