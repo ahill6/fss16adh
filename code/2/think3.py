@@ -1,4 +1,4 @@
-# This is the source code for homework 2.  Since most of the problems 
+# This is the source code for homework 2 - (chapter 3 problems).  Since most of the problems 
 # really reuqire screenshots more than functional code, this is somewhat 
 # unorganized and is provided just in case it is wanted.
 
