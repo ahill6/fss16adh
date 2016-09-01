@@ -1,3 +1,5 @@
+Code is in this folder and commented on anything that is not self-explanatory.  All verification below.
+
 [Answers to active shooter questions][ans]
 
 Screenshots for:
