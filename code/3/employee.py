@@ -11,8 +11,8 @@ class Employee(object):
         self.suit = suit
         self.rank = rank
 
-    def __str__(self): # according to online documentation, __repr__ is for machine-readable output, __str__ for human-readable
-        """Returns a human-readable string representation."""
+    def __repr__(self): 
+        """Returns a string representation."""
         return '%s is age %s' % (Employee.name,
                              Employee.age)
 
