@@ -11,7 +11,7 @@ from cards import *
 import copy
 
 class PokerHand(Hand):
-
+        
     def suit_hist(self):
         """Builds a histogram of the suits that appear in the hand.
 
@@ -165,9 +165,9 @@ class PokerHand(Hand):
             self.label = "one pair"
         else:
             self.label = "nothing"
-            #self.sort()
-            #self.label = self[0] " high"
-            
+            self.cards.sort()
+            #self.label = "%s high" %str(self.cards[-1]) # if instead of counting you want a better display
+        return self.label
             
 if __name__ == '__main__':
     # make a deck

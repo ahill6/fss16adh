@@ -93,6 +93,7 @@ class Deck(object):
         """
         for i in range(num):
             hand.add_card(self.pop_card())
+    
 
 
 class Hand(Deck):

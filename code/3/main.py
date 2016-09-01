@@ -1,14 +1,5 @@
-from birthday import *
-from cards import *
-from poker_hand import *
+from tester import *
 
-birthday_paradox(23, 1000)
+#tester(birthday_tester, 100, 2, 23, '')
 
-"""deck = Deck()
-deck.shuffle()
-
-hand = PokerHand()
-deck.move_cards(hand, 5)
-hand.classify()
-print hand.label
-print hand"""
+tester(poker_tester, 1000, 1, 5, 'dict')
