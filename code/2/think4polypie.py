@@ -1,11 +1,10 @@
-"""Add some type of "I wrote this, thanks to XX"
-Mention that I didn't think it was necessary to draw them all on the same graph until looking at the answer key,
-so sneak and the print to file part were added later."""
+""" I added the sneak method to this and the flower code after looking at the author's code and realizing he intended all three
+figures to be printed in the same window."""
 
 from swampy.TurtleWorld import *
 from polygon import polygon
 from math import cos, radians
-# TODO clean up code, see if things can be improved, add documentation
+
 world = TurtleWorld()
 bob = Turtle()
 bob.delay = 0.0001
@@ -20,8 +19,7 @@ def polypie_interior(turtle, num_sides, side_length):
     interior_degrees = 180* (num_sides-2)
     angle = interior_degrees/num_sides
 
-    interior_length = (.5*side_length)/(cos(radians(.5*angle)))
-
+    interior_length = (.5*side_length)/(cos(radians(.5*angle))) # interior length from right triangle with apothem and trig
 
     lt(turtle, .5*angle)
     fd(turtle, interior_length)
@@ -32,6 +30,8 @@ def polypie_interior(turtle, num_sides, side_length):
         lt(turtle, 180)
         fd(turtle, interior_length)
 
+    # The turtle finishes drawing interior lines at the center of the polygon, facing in from the line drawn last.
+    # This code moves him to the original starting point facing the original starting direction.
     pu(turtle)
     lt(turtle, angle)
     fd(turtle, interior_length)
