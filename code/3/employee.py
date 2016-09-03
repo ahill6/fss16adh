@@ -8,13 +8,13 @@ class Employee(object):
     """
 
     def __init__(self, name=None, age=None):
-        self.suit = suit
-        self.rank = rank
+        self.name = name
+        self.age = age
 
     def __repr__(self): 
         """Returns a string representation."""
-        return '%s is age %s' % (Employee.name,
-                             Employee.age)
+        return '%s is age %s' % (self.name,
+                             self.age)
 
     def __lt__(self, other):
         """Compares this card to other, first by age, then name (as a tiebreaker).
@@ -22,5 +22,5 @@ class Employee(object):
         
         t1 = self.age, self.name
         t2 = other.age, other.name
-        return lt(t1, t2)  #figure out how exactly this code works
+        return cmp(t1, t2)  #figure out how exactly this code works
 
