@@ -4,7 +4,6 @@ class Employee(object):
     Attributes:
       name: string
       age:  int 
-      TODO - Replace age with birthdate and calculate age when desired
     """
 
     def __init__(self, name=None, age=None):
@@ -17,10 +16,6 @@ class Employee(object):
                              self.age)
 
     def __lt__(self, other):
-        """Compares this card to other, first by age, then name (as a tiebreaker).
+        """Compares the ages of the two employees.
         """
-        
-        t1 = self.age, self.name
-        t2 = other.age, other.name
-        return cmp(t1, t2)  #figure out how exactly this code works
-
+        return self.age < other.age
