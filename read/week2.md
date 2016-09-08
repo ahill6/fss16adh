@@ -25,3 +25,5 @@ iv1: Very Limited Results - While expected of most research papers, the results 
 iv2: "Pure Delay" Model - At the end of section IV, the authors mention that the model used is a "pure delay" model - meaning there is an assumption that "any action at the beginning of a step has exhauseted its effect at the end of that step".  This should be investigated as a potentially invalid assumption.
 
 iv3: Does Not Explain Terms/Grammar - In several cases the authors make simple grammar mistakes that slightly distract from the paper.  In addition, at the end of section IV the authors do not follow best practice of writing out acronyms at least once before using them with PCTL.
+
+### v. Connection to Other Papers
