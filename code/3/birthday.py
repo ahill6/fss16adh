@@ -25,12 +25,3 @@ def gen_rand_birthday(n):
     for i in range(n):
         lst += [random.randint(1,365)]
     return lst
-    
-def birthday_paradox(samples, trials):
-    count = 0
-    
-    for i in xrange(trials):
-        bdays = gen_rand_birthday(samples)
-        if has_duplicates(bdays):
-            count += 1
-    print count
