@@ -33,7 +33,7 @@ def P(current, next, heat):
     """
     
 def run():
-    kmax = 10000.0
+    kmax = 1000.0
     emin = 2
     current_state = random.randint(-10000,10000)
     #current_energy = energy(schaffer(current_state))
