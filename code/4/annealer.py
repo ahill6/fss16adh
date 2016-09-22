@@ -3,9 +3,13 @@ import random, sys
 from math import exp
 
 def schaffer(x):
+    """Definition of the function to be optimized
+    """
     return x**2 + (x-2)**2
     
 def energy(f, x):
+    """Making this generic allows for switching out optimization functions easily
+    """
     return f(x) # scaling is not needed for the optimizer, but for the heat/probability calculation
     
 def neighbor():
@@ -14,6 +18,8 @@ def neighbor():
 def output(x): print(x, end="")
 
 def P(current, next, heat):
+    """Calculates the probability of a "dumb" jump.  Likelihood decreases as k increases
+    """
     max = 199960004.0 
     min = 2.0
     old = (current - min) / (max - min)
@@ -30,9 +36,10 @@ def move(cur):
     return cur + neighbor()
     
 def run():
+    # Set initial variables
     kmax = 1000.0
     emin = 3
-    opt_func = schaffer
+    opt_func = schaffer # specify which optimization function to use (must be defined in a function)
     current_state = random.randint(-10000,10000)
     current_energy = energy(opt_func, current_state)
     best_state = current_state
@@ -44,21 +51,24 @@ def run():
         next_state = move(current_state)
         next_energy = energy(opt_func, next_state)
         if next_energy < best_energy:
+            # We have a new best!
             current_state = next_state
             current_energy = next_energy
             best_state = next_state
             best_energy = next_energy
             output("!")
         elif next_energy < current_energy:
+            # Incremental improvement
             current_state = next_state
             current_energy = next_energy
             output("+")
         elif P(current_energy, next_energy, k/kmax) < random.random():
+            # At some probability, jump to the new location despite being worse
             current_state = next_state
             current_energy = next_energy
             output("?")
         else:
-            output(".")
+            output(".") # nothing special happened
         k += 1
         if k%25 == 0:
             print("\t", best_state, best_energy)

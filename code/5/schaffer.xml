@@ -1,0 +1,4 @@
+<problem>
+    <bound><var>x</var><min>-10000</min><max>10000</max></bound>
+    <energy><function>x**2 + (x-2)**2</function><minimize>True</minimize></energy>
+</problem>

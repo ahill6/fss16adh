@@ -1,0 +1,14 @@
+<problem>
+    <constraint>(a + b - 2) > 0</constraint>
+    <constraint>(6 - a - b) > 0</constraint>
+    <constraint>(2 - a + 3*b) > 0</constraint>
+    <constraint>(4 - (c - 3)**2 - d) > 0</constraint>
+    <constraint>((e - 3)**3 + f - 4) > 0</constraint>
+    <bound><var>a</var><min>0</min><max>10</max></bound>
+    <bound><var>b</var><min>0</min><max>10</max></bound>
+    <bound><var>c</var><min>1</min><max>5</max></bound>
+    <bound><var>d</var><min>0</min><max>6</max></bound>
+    <bound><var>e</var><min>1</min><max>5</max></bound>
+    <bound><var>f</var><min>0</min><max>10</max></bound>
+    <energy><function>-(25*(a - 2)**2 + (b - 2)**2 + ((c - 1)**2)*((d - 4)**2) + (e - 1)**2) + a**2 + b**2 + c**2 + d**2 + e**2 + f**2</function><minimize>False</minimize></energy>
+</problem>
