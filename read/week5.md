@@ -1,5 +1,5 @@
 ### i. Paper
-Harman, Mark, et al. "Dynamic adaptive search based software engineering." Proceedings of the 2012 ACM-IEEE International Symposium on Empirical Software Engineering and Measurement. IEEE, 2012.
+Harman, Mark, John Clark, and Mel O. Cinneidez. "Dynamic adaptive Search Based Software Engineering needs fast approximate metrics (keynote)." Emerging Trends in Software Metrics (WETSoM), 2013 4th International Workshop on. IEEE, 2013.
 
 ### ii. Keywords
 ii1: SBSE for Metrics - The use of SBSE optimization techniques as a means of evaluating metrics on a space.  That is, because the optimization is guided by the fitness function, you can use an optimization technique to compare metrics.
