@@ -1,33 +1,31 @@
-Harman, Mark, and Phil McMinn. "A theoretical and empirical study of search-based testing: Local, global, and hybrid search." IEEE Transactions on Software Engineering 36.2 (2010): 226-247.
+### i. Paper
+Harman, Mark, John Clark, and Mel O. Cinneidez. "Dynamic adaptive Search Based Software Engineering needs fast approximate metrics (keynote)." Emerging Trends in Software Metrics (WETSoM), 2013 4th International Workshop on. IEEE, 2013.
 
 ### ii. Keywords
-ii1: Schema Theory - An expansion of the work of John Holland, the theoretical underpinning of Genetic Algorithms, which explains why genetic algorithms work.  The properties sometimes fail in Evolutionary and multimodal cases.
+ii1: SBSE for Metrics - The use of SBSE optimization techniques as a means of evaluating metrics on a space.  That is, because the optimization is guided by the fitness function, you can use an optimization technique to compare metrics.
 
-ii2: Royal Road - Genetic/Evolutionary Algorithms rely on an assumption that some subset of fit behaviors also encourage fitness (i.e. if you cross-breed two fit solutions, you will not destroy what was good about them).  Royal Road Theory/Functions/Properties address what type of spaces, functions, properties are necessary for this to be a reasonable assumption (i.e. they attempt to say when using an Evolutionary-type algorithm is a good idea).
+ii2: Metametrics - Metrics which describe how different metrics relate to one another (i.e which are "close")
 
-ii3: Hybrid Search Techniques - The combination of a greedy algorithm and an evolutionary or genetic technique in an effort to get the best of both.
+ii3: Dissonant Metrics - A pair of metrics for a given problem (which claim to measure the same thing) for which code refactoring causes one metric to change, but not the other.
 
-ii4: Search Based Testing - The application of SBSE to the generation of software tests and program testing coverage.
+ii4: Conflicted Metrics - A pair of metrics (which claim to measure the same thing) for a given problem for which code refactoring leads one metric to increase, and the other to decrease.
 
 ### iii. A Few Notes
-iii1: Motivation - The paper responds to a lack of theory by providing a theoretical foundation for Search-Based Testing, making predictions based on the theory, then doing empirical tests to validate the predictions.
+iii1: Motivation - The paper describes a new application of SBSE techniques to metric evaluation and discusses the importance of fast metrics, even if they are approximate.
 
-iii2: Theoretical Background - In order to provide theory, the paper develops a generalization of existing work which updates work on Genetic Algorithms to apply to Evolutionary Algoithms.
+iii2: Related Work - The authors give extensive references to the papers which inspired this work.  Each section begins with a brief literature review, in addition to a "Further Reading" section at the conclusion.
 
-iii3: New Results - The paper reports many findings, such as:
-+ Greedy methods were far more competitive than expected under a variety of conditions
-+ Development and presentation of a hybrid method which used a Hill-climber to save work and an Evolutionary Algorithm to get in those hard-to-reach corners.
-+ Provided theory that the authors claimed did not previously exist.
+iii3: New Results - The most important new result in this paper was the finding that 38% of studied metrics which claimed to measure code cohesion were conflicted metrics (see Keyword section).
 
-iii4: Future Work - Expansion of the theory presented, improving the hybrid method used (it failed to reach one pathological branch that an Evolutionary Algorithm did reach), and a practical means of identifying whether the current location calls for a hill-climber or an evolutionary algorithm.
+iii4: Future Work - The paper suggested that future work on metametrics could provide clarity on why metrics claiming to measure the same quantity respond differently to code refactoring. 
 
 
 ### iv. Weaknesses
-iv1: Length - The paper was over 20 pages, making it the longest paper I have encounted outside of book chapters.  Several sections could have been reduced in size without impacting the quality of the work.
+iv1: Chasing Rabbits - After spending most of the paper discussing problems with the metrics studied and the importance of fast approximate metrics, the last half page is a philosophical reflection on the nature of software engineering.  While interesting, it did not go with the rest of the paper.
 
-iv2: Unnecessary Citations - Section 6 is a "Related Work" section which includes listing the 20-year-old paper that first conceived of some parts of the field.  It seemed the authors were just going for more references.
+iv2: Use of Space - The important claims are not given enough room in this paper.  It puts forward an important and shocking claim that not only do metrics determine results, but the most commonly used metrics in the area studied disagree.  This is an important issue, but the paper moves on from it after little more than 1-2 pages.
 
-iv3: Test Case - The authors repeatedly referenced a test case having to do with ISBNs, but never explained what they were testing or how.
+iv3: Concrete Suggestions - The portions of the paper not devoted to the need for metametrics bring up the importance of fast approximate metrics, but offer no concrete suggestions of fruitful directions or background on successful attempts to find such metrics.
 
 ### v. Connection To Other Papers
-This paper supplies much of the background in the area of Search-Based Testing for the base paper, as well as providing a theoretical framework from which the base paper proposes future directions.
+This paper represents a step forward for the agenda laid out in the base paper.  The agenda has found its first obstacle: the lack of understanding on the influence of metrics on optimization outcomes, and the lack of tools with which to compare what metrics are used by different algorithms.
