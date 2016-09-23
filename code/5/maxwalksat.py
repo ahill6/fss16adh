@@ -323,10 +323,3 @@ def mws(retries=10, changes=300):
                 print("\n")
         print("\n", best_sol)
     return best_sol
-
-
-<<<<<<< HEAD
-#print("\n", mws())
-=======
-print("\n", maxwalksat())
->>>>>>> 2836d99013f549472483fbd79dc04219099d5747
