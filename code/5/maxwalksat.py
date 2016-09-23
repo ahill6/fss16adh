@@ -19,12 +19,18 @@ def better(a, b):
 
 
 def xml_reader(filename):
+    """Reads an xml file into a tree that can be parsed.
+    Here the model is created as an xml document, this reads in the model
+    Future versions will have all the I/O abstracted into an I/O class
+    """
     tree = ElementTree.parse(filename)
     root = tree.getroot()
     return tree
 
 
-def readdata(filename):  # this was originally intended for bulk input of files, but it now only does one.
+def readdata(filename):  
+    """Generic reader that acts as a quarterback to different file-specific I/O operations
+    """
     if '.xml' in filename:
         data = xml_reader(filename)
     else:
@@ -33,6 +39,8 @@ def readdata(filename):  # this was originally intended for bulk input of files,
 
 
 def read_data(filename):
+    """Takes tree returned from xml_reader and builds the model from that data
+    """
     xmltree = readdata(filename)
     decisions = []
     objectives = []
@@ -64,7 +72,7 @@ def random_value(low, high, decimals=2):
     return round(random.uniform(low, high), decimals)
 
 
-def output(x): print(x, end="")
+def output(x): print(x, end="") # print without newline
 
 
 class O:
@@ -167,19 +175,28 @@ class Problem(O):
 
     @staticmethod
     def evaluate(self, sol):
+        """evaluates the objective value(s) for a given solution
+        """
         if (len(sol.decisions) != len(self.decisions)):
             raise IndexError("Error, solution and decisions different lengths")
 
         var = []
         for i in xrange(len(self.decisions)):
             var.append(self.decisions[i].name)
-        tmp = zip(var, sol.decisions)
+        tmp = zip(var, sol.decisions) # tmp now has all variable names and the values of sol for those variables
 
         thismodule = sys.modules[__name__]
 
+        """Take the variable/value pairs, and set the variable to the value
+        (e.g. sol.decisions has 4 for a.  This uses setattr to automatically write the
+        statement "a = 4".)
+        """
         for key, value in tmp:
             setattr(thismodule, key, value)
 
+        """Now that all variables in the objective functions have values, evaluating them
+        is simply a matter of calling "eval" on the objectives (already inputted as mathematical operations)
+        """
         ener = []
         for obj in self.objectives:
             ener.append(eval(obj.func))
@@ -189,6 +206,10 @@ class Problem(O):
 
     @staticmethod
     def is_valid(self, sol):
+        """Checks whether a solution is valid by seeing if all decision variables are within their bounds, 
+        and whether all constraints are met.  Uses same trick as evaluate to assign values.
+        """
+        
         var = []
         for i in xrange(len(self.decisions)):
             var.append(self.decisions[i].name)
@@ -207,6 +228,7 @@ class Problem(O):
         return True
 
     def generate_one(self):
+        """Generate one valid solution"""
         while True:
             sol = Solution([random_value(d.low, d.high) for d in self.decisions])
             if Problem.is_valid(self, sol):
@@ -217,36 +239,38 @@ def p():
     return 0.5
 
 
-def maxwalksat(retries=10, changes=300):
+def mws(retries=10, changes=300):
+    """The only part of this file specific to Maxwalksat, this is the MWS algorithm
+    """
     datafile = "osyczka.xml"
     problem = Problem(datafile)
-    omax = -3000
+    omax = -3000    # this can be whatever you chose.  I am calling it omax even though it could be a minimum
     current_sol = problem.generate_one()
     best_sol = current_sol
     best_obj = problem.evaluate(problem, best_sol)
 
-    for i in xrange(retries):
-        current_sol = problem.generate_one()
+    for i in xrange(retries): # for some number of tries
+        current_sol = problem.generate_one() # generate a solution
         print("\n",current_sol)
-        for j in xrange(changes):
+        for j in xrange(changes): # for each try, for some number of changes allowed
             current_obj = problem.evaluate(problem, current_sol)
             if better(current_obj, omax):
-                return current_sol
+                return current_sol # good enough!
             if better(current_obj, best_obj):
                 best_sol = copy.deepcopy(current_sol)
                 best_obj = copy.deepcopy(current_obj)
-                output("!")
-            if p() < random.random():
+                output("!") # found a new global optimum!
+            if p() < random.random(): # at some probability, jump around
                 rand = random.randint(0, len(problem.decisions) - 1)
                 tmp = current_sol
                 tmp.decisions[rand] = current_sol.decisions[rand] + problem.decisions[rand].high
 
-                while not problem.is_valid(problem, tmp):
+                while not problem.is_valid(problem, tmp): # make sure you jump somewhere valid
                     tmp.decisions[rand] = random_value(problem.decisions[rand].low, problem.decisions[rand].high)
                 current_sol = tmp
                 output("#")
-            else:
-                rand = random.randint(0, len(problem.decisions) - 1)
+            else: # we aren't jumping, so we're rolling marbles
+                rand = random.randint(0, len(problem.decisions) - 1) # pick a direction
                 dirmax = problem.decisions[rand].high
                 dirmin = problem.decisions[rand].low
                 tmp = copy.deepcopy(current_sol)
@@ -295,10 +319,10 @@ def maxwalksat(retries=10, changes=300):
                     pass
                 """
                 output(".")
-            if ((i + 1) % 25 == 0):
+            if ((j + 1) % 25 == 0):
                 print("\n")
         print("\n", best_sol)
     return best_sol
 
 
-print("\n", maxwalksat())
+#print("\n", mws())
