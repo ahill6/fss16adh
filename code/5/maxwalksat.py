@@ -295,7 +295,7 @@ def maxwalksat(retries=10, changes=300):
                     pass
                 """
                 output(".")
-            if ((i + 1) % 25 == 0):
+            if ((j + 1) % 25 == 0):
                 print("\n")
         print("\n", best_sol)
     return best_sol
