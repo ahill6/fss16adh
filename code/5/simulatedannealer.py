@@ -282,95 +282,90 @@ class Problem(O):
             sol = Solution([random_value(d.low, d.high) for d in self.decisions])
             if Problem.is_valid(self, sol):
                 return sol
+    
+def randomjump(low,high):
+    return low + random.random()*(high-low) # this can be used either as a percentage of the whole space or just step length
 
-
-def p():
-    return 0.5
-
-
-def mws(filename, retries=10, changes=300):
-    """The only part of this file specific to Maxwalksat, this is the MWS algorithm
+def P(current, next, heat):
+    """Calculates the probability of a "dumb" jump.  Likelihood decreases as k increases
     """
+    # this doesn't work unless the "better" method is < or >.  Is there a way to do this with bdom/cdom?
+    if isinstance(current, (list, tuple)):
+        current = current[0]
+    if isinstance(next, (list, tuple)):
+        next = next[0]
+        
+    max = 199960004.0 # need to figure out how to change this/set it automatically for new problems...ugh
+    min = 2.0
+    old = (current - min) / (max - min)
+    new = (next - min) / (max - min)
+    
+    if heat != 0:
+        return math.exp((old-new)/heat)
+    else:
+        print("heat = 0, divide by zero")
+        print (current, next, heat)
+        sys.exit()
+        
+def singlemove(prob, cur):
+    index = random.randint(0,len(prob.decisions)-1)
+    jumpsize = (prob.decisions[index].high - prob.decisions[index].low)*.01
+    cur.decisions[index] += randomjump(-jumpsize, jumpsize)
+    return cur
+    
+def multimove(prob, cur):
+    for i in range(len(prob.decisions)):
+        jumpsize = (prob.decisions[i].high - prob.decisions[i].low)*.01
+        cur.decisions[i] += randomjump(-jumpsize, jumpsize)
+    return cur
+    
+def annealer(filename):  # need to figure out how to get this to work with multiple dimensions/objectives/decisions
+    """The only part of this file specific to Simulated Annealing.  This is the SA algorithm.
+    """
+    move = multimove # figure out a more elegant way to set this, but can pick whichever.
+    #move = singlemove
+    
     if filename == None:
         filename = "osyczka2.xml"
     problem = Problem(filename)
     omax = problem.omax    # this needs to also be specified in model.  I am calling it omax even though it could be a minimum
     #omax = -3000
     current_sol = problem.generate_one()
-    best_sol = current_sol
-    best_obj = problem.evaluate(problem, best_sol)
-
-    for i in xrange(retries): # for some number of tries
-        current_sol = problem.generate_one() # generate a solution
-        print("\n",current_sol)
-        for j in xrange(changes): # for each try, for some number of changes allowed
-            current_obj = problem.evaluate(problem, current_sol)
-            if better(current_obj, omax):
-                return current_sol # good enough!
-            if better(current_obj, best_obj):
-                best_sol = copy.deepcopy(current_sol)
-                best_obj = copy.deepcopy(current_obj)
-                output("!") # found a new global optimum!
-            if p() < random.random(): # at some probability, jump around
-                rand = random.randint(0, len(problem.decisions) - 1)
-                tmp = current_sol
-                tmp.decisions[rand] = current_sol.decisions[rand] + problem.decisions[rand].high
-
-                while not problem.is_valid(problem, tmp): # make sure you jump somewhere valid
-                    tmp.decisions[rand] = random_value(problem.decisions[rand].low, problem.decisions[rand].high)
-                current_sol = tmp
-                output("#")
-            else: # we aren't jumping, so we're rolling marbles
-                rand = random.randint(0, len(problem.decisions) - 1) # pick a direction
-                dirmax = problem.decisions[rand].high
-                dirmin = problem.decisions[rand].low
-                tmp = copy.deepcopy(current_sol)
-                cur = current_sol.decisions[rand]
-                jump = (dirmax - dirmin) / 10.0
-                k = cur + jump
-                tmp_best = copy.deepcopy(tmp)
-                tmp_best_score = current_obj
-                while (k) < dirmax:  # going in the positive direction
-                    tmp.decisions[rand] = k
-                    score = 'a'
-                    if problem.is_valid(problem, tmp):
-                        score = problem.evaluate(problem, tmp)
-                        if better(score, tmp_best_score):
-                            tmp_best = copy.deepcopy(tmp)
-                            tmp_best_score = score
-                    k += jump
-                k = cur - jump
-                while (k) > dirmin:  # going in the negative direction
-                    tmp.decisions[rand] = k
-                    score = 'a'
-                    if problem.is_valid(problem, tmp):
-                        score = problem.evaluate(problem, tmp)
-                        if better(score, tmp_best_score):
-                            tmp_best = copy.deepcopy(tmp)
-                            tmp_best_score = score
-                    k -= jump
-                # If we are jumping all the way to the best one found
-                current_sol = copy.deepcopy(tmp_best)
-                # If we are taking one step in the direction of best one found
-                """
-                tmp = current_sol
-                if current_sol.decisions[rand] > tmp_best.decisions[rand]:
-                    while tmp.decisions[rand] > dirmin:
-                        tmp.decisions[rand] -= jump
-                        if problem.is_valid(problem, tmp):
-                            current_sol = tmp
-                            break
-                elif current_sol.decisions[rand] > tmp_best.decisions[rand]:
-                    while tmp.decisions[rand] > dirmin:
-                        tmp.decisions[rand] -= jump
-                        if problem.is_valid(problem, tmp):
-                            current_sol = tmp
-                            break
-                else:
-                    pass
-                """
-                output(".")
-            if ((j + 1) % 25 == 0):
-                print("\n")
-        print("\n", best_sol)
-    return best_sol
+    current_obj = problem.evaluate(problem, current_sol)
+    best_sol = copy.deepcopy(current_sol)
+    best_obj = copy.deepcopy(current_obj)
+    k = 1
+    kmax = 1000.0 #need another part of file for state constants(?)
+    
+    # NEED TO CHANGE ALL OF THESE "<" TO "BETTER" and get a good implementation of "better"
+    # Run Simulated Annealer
+    while (k < kmax and current_obj > omax):
+        next_sol = move(problem, current_sol)
+        next_obj = problem.evaluate(problem, next_sol)
+        if next_obj < best_obj:
+            # We have a new best!
+            current_sol = copy.deepcopy(next_sol)
+            current_obj = copy.deepcopy(next_obj)
+            best_sol = copy.deepcopy(next_sol)
+            best_obj = copy.deepcopy(next_obj)
+            output("!")
+        elif next_obj < current_obj:
+            # Incremental improvement
+            current_sol = copy.deepcopy(next_sol)
+            current_obj = copy.deepcopy(next_obj)
+            output("+")
+        elif P(current_obj, next_obj, k/kmax) < random.random():
+            # At some probability, jump to the new location despite being worse
+            current_sol = copy.deepcopy(next_sol)
+            current_obj = copy.deepcopy(next_obj)
+            output("?")
+        else:
+            output(".") # nothing special happened
+        k += 1
+        if k%25 == 0:
+            print("\t", best_obj)
+            
+    print("\nEnded at", k)
+    print("state \t", best_sol)
+    print("energy\t", best_obj)
+    #return best_sol

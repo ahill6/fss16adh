@@ -10,6 +10,7 @@
     <bound><var>d</var><min>0</min><max>6</max></bound>
     <bound><var>e</var><min>1</min><max>5</max></bound>
     <bound><var>f</var><min>0</min><max>10</max></bound>
-    <energy><function>-(25*(a - 2)**2 + (b - 2)**2 + ((c - 1)**2)*((d - 4)**2) + (e - 1)**2) + a**2 + b**2 + c**2 + d**2 + e**2 + f**2</function><minimize>False</minimize></energy>
-    <omax>-360</omax>
+    <energy><function>-(25*(a - 2)**2 + (b - 2)**2 + ((c - 1)**2)*((d - 4)**2) + (e - 1)**2)</function><minimize>False</minimize></energy>
+    <energy><function>a**2 + b**2 + c**2 + d**2 + e**2 + f**2</function><minimize>False</minimize></energy>
+    <omax>[-300, -300]</omax>
 </problem>
