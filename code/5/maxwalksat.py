@@ -278,10 +278,13 @@ class Problem(O):
 
     def generate_one(self):
         """Generate one valid solution"""
-        while True:
+        retries = 250 #make this configurable
+        while retries > 0:
             sol = Solution([random_value(d.low, d.high) for d in self.decisions])
             if Problem.is_valid(self, sol):
                 return sol
+            retries -= 1
+        raise Exception('Problem too hard, unable to generate a valid solution randomly')
 
 
 def p():
@@ -310,7 +313,7 @@ def mws(filename, retries=10, changes=300):
             if better(current_obj, best_obj):
                 best_sol = copy.deepcopy(current_sol)
                 best_obj = copy.deepcopy(current_obj)
-                output("!") # found a new global optimum!
+                #output("!") # found a new global optimum!
             if p() < random.random(): # at some probability, jump around
                 rand = random.randint(0, len(problem.decisions) - 1)
                 tmp = current_sol
@@ -319,7 +322,7 @@ def mws(filename, retries=10, changes=300):
                 while not problem.is_valid(problem, tmp): # make sure you jump somewhere valid
                     tmp.decisions[rand] = random_value(problem.decisions[rand].low, problem.decisions[rand].high)
                 current_sol = tmp
-                output("#")
+                #output("#")
             else: # we aren't jumping, so we're rolling marbles
                 rand = random.randint(0, len(problem.decisions) - 1) # pick a direction
                 dirmax = problem.decisions[rand].high
@@ -369,7 +372,7 @@ def mws(filename, retries=10, changes=300):
                 else:
                     pass
                 """
-                output(".")
+                #output(".")
             if ((j + 1) % 25 == 0):
                 print("\n")
         print("\n", best_sol)

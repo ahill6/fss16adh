@@ -12,7 +12,7 @@ Also supports spill trees.
 
 See: docs for spatialtree.spatialtree
 '''
-
+from scipy.stats import entropy
 import sys
 import numpy
 import scipy.stats
@@ -106,6 +106,10 @@ class spatialtree(object):
             kwargs['samples_rp']    = 10
             pass
         
+        if 'entropic' in kwargs['rule'] and 'samples_entr' not in kwargs:
+            kwargs['samples_entr']    = 5
+            pass
+        
         #if there needs to be any default value for WHERE, put here
         # TODO - add a way to input your preferred values for these
         if kwargs['rule'] == 'where':
@@ -140,8 +144,7 @@ class spatialtree(object):
         Recursive algorithm to build a tree by splitting data.
 
         Not to be called externally.
-        '''
-        
+        '''    
         # First, find the split rule
         if kwargs['rule'] == 'pca':
             splitF  =   self.__PCA
@@ -157,6 +160,12 @@ class spatialtree(object):
             splitF  =   self.__random
         elif kwargs['rule'] == 'spectral':
             splitF  =   self.__spectral
+        elif kwargs['rule'] == 'entropic':
+            splitF  =   self.__entropic
+        elif kwargs['rule'] == 'entropic2':
+            splitF  =   self.__entropic2
+        elif kwargs['rule'] == 'entropic3':
+            splitF  =   self.__entropic3
         else:
             raise ValueError('Unsupported split rule: %s' % kwargs['rule'])
         
@@ -619,6 +628,161 @@ class spatialtree(object):
         elapsed = timeit.default_timer() - start_time
         #print(str(elapsed)+',')
         return W[numpy.argmax(max_val - min_val)]
+
+    def __entropic(self, data, **kwargs):
+        '''
+        Entropy-based split
+
+        Generates some number m of random directions w by sampling
+        from the d-dimensional unit sphere, and picks the w which
+        maximizes the information gain.
+        '''
+        start_time = timeit.default_timer()
+        k   = kwargs['samples_entr']
+
+        # sample directions from d-dimensional normal
+        W   = numpy.random.randn( k, self.__d )
+
+        # normalize each sample to get a sample from unit sphere
+        for i in xrange(k):
+            W[i] /= numpy.sqrt(numpy.sum(W[i]**2))
+
+        max_gain = numpy.infty
+        max_item = data[0]
+        cur_kl  = sum([entropy(x) for i, x in enumerate(data) if i in kwargs['indices']])
+        for i in xrange(kwargs['samples_entr']):
+            w      = W[i]
+            
+            wx = {}
+            for i in self.__indices:
+                wx[i] = numpy.dot(w, data[i])
+                pass
+            
+            self.__thresholds = scipy.stats.mstats.mquantiles(wx.values(), [0.5 - self.__spill/2, 0.5 + self.__spill/2])
+        
+            lft_set    = set()
+            rght_set   = set()
+
+            for (i, val) in wx.iteritems():
+                if val >= self.__thresholds[0]:
+                    rght_set.add(i)
+                if val < self.__thresholds[-1]:
+                    lft_set.add(i)
+                pass
+            del wx  # Don't need scores anymore
+            
+            left_score = sum([entropy(x) for i, x in enumerate(data) if i in lft_set])
+            right_score = sum([entropy(x) for i, x in enumerate(data) if i in rght_set])
+            if left_score+right_score < max_gain:
+                max_gain = left_score+right_score
+                max_item = copy.deepcopy(w) # Is this copy necessary?
+            pass
+
+        elapsed = timeit.default_timer() - start_time
+        #print(str(elapsed)+',')
+        return max_item
+        
+    def __entropic2(self, data, **kwargs):
+        '''
+        Entropy-based split
+
+        Generates some number m of random directions w by sampling
+        from the d-dimensional unit sphere, and picks the w which
+        maximizes the information gain.
+        '''
+        start_time = timeit.default_timer()
+        k   = kwargs['samples_entr']
+        
+        local = numpy.take(data,list(kwargs['indices']), axis=0)
+
+        # sample directions from d-dimensional normal
+        W   = numpy.random.randn( k, self.__d )
+
+        # normalize each sample to get a sample from unit sphere
+        for i in xrange(k):
+            W[i] /= numpy.sqrt(numpy.sum(W[i]**2))
+
+        max_gain = numpy.infty
+        max_item = numpy.ones(len(data[0]))
+        cur_kl  = sum([entropy(x) for x in local])
+        
+        a = numpy.dot(W, local.transpose())
+        
+        for i in xrange(a.shape[0]-1):
+            self.__thresholds = scipy.stats.mstats.mquantiles(a[i,:], [0.5 - self.__spill/2, 0.5 + self.__spill/2])
+        
+            lft_set    = set()
+            rght_set   = set()
+
+            for k in xrange(a.shape[0]):
+                if a[i,k] >= self.__thresholds[0]:
+                    rght_set.add(k)
+                if a[i,k] < self.__thresholds[-1]:
+                    lft_set.add(k)
+            
+            #figure out what these entries should be
+            # should this be entropy(a[i,k], local[i]) ??
+            #left_score = sum([entropy(a[i,k],local[k]) for k in lft_set])
+            #right_score = sum([entropy(a[i,k],local[k]) for k in rght_set])
+            left_score = sum([entropy(a[i,k]) for k in lft_set])
+            right_score = sum([entropy(a[i,k]) for k in rght_set])
+            if left_score+right_score < max_gain:
+                max_gain = left_score+right_score
+                max_item = copy.deepcopy(W[i]) # Is this copy necessary?
+
+        elapsed = timeit.default_timer() - start_time
+        #print(str(elapsed)+',')
+        return max_item
+
+    def __entropic3(self, data, **kwargs):
+        '''
+        Entropy-based split
+
+        Generates some number m of random directions w by sampling
+        from the d-dimensional unit sphere, and picks the w which
+        maximizes the information gain.
+        '''
+        start_time = timeit.default_timer()
+        k   = kwargs['samples_entr']
+        
+        local = numpy.take(data,list(kwargs['indices']), axis=0)
+
+        # sample directions from d-dimensional normal
+        W   = numpy.random.randn( k, self.__d )
+
+        # normalize each sample to get a sample from unit sphere
+        for i in xrange(k):
+            W[i] /= numpy.sqrt(numpy.sum(W[i]**2))
+
+        max_gain = numpy.infty
+        max_item = numpy.ones(len(data[0]))
+        cur_kl  = sum([entropy(x) for x in local])
+        
+        a = numpy.dot(W, local.transpose())
+        
+        for i in xrange(a.shape[0]-1):
+            self.__thresholds = scipy.stats.mstats.mquantiles(a[i,:], [0.5 - self.__spill/2, 0.5 + self.__spill/2])
+        
+            lft_set    = set()
+            rght_set   = set()
+
+            for k in xrange(a.shape[0]):
+                if a[i,k] >= self.__thresholds[0]:
+                    rght_set.add(k)
+                if a[i,k] < self.__thresholds[-1]:
+                    lft_set.add(k)
+            
+            #figure out what these entries should be
+            # should this be entropy(a[i,k], local[i]) ??
+            left_score = sum([entropy(a[i,k],local[i]) for k in lft_set])
+            right_score = sum([entropy(a[i,k],local[i]) for k in rght_set])
+            if left_score+right_score < max_gain:
+                max_gain = left_score+right_score
+                max_item = copy.deepcopy(W[i]) # Is this copy necessary?
+
+        elapsed = timeit.default_timer() - start_time
+        #print(str(elapsed)+',')
+        return max_item
         
     def __where(self, data, **kwargs):
         start_time = timeit.default_timer()

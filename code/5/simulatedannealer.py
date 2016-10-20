@@ -326,6 +326,7 @@ def annealer(filename):  # need to figure out how to get this to work with multi
     #move = singlemove
     
     if filename == None:
+        print("SA no file")
         filename = "osyczka2.xml"
     problem = Problem(filename)
     omax = problem.omax    # this needs to also be specified in model.  I am calling it omax even though it could be a minimum
@@ -348,17 +349,17 @@ def annealer(filename):  # need to figure out how to get this to work with multi
             current_obj = copy.deepcopy(next_obj)
             best_sol = copy.deepcopy(next_sol)
             best_obj = copy.deepcopy(next_obj)
-            output("!")
+            #output("!")
         elif next_obj < current_obj:
             # Incremental improvement
             current_sol = copy.deepcopy(next_sol)
             current_obj = copy.deepcopy(next_obj)
-            output("+")
+            #output("+")
         elif P(current_obj, next_obj, k/kmax) < random.random():
             # At some probability, jump to the new location despite being worse
             current_sol = copy.deepcopy(next_sol)
             current_obj = copy.deepcopy(next_obj)
-            output("?")
+            #output("?")
         else:
             output(".") # nothing special happened
         k += 1
@@ -368,4 +369,4 @@ def annealer(filename):  # need to figure out how to get this to work with multi
     print("\nEnded at", k)
     print("state \t", best_sol)
     print("energy\t", best_obj)
-    #return best_sol
+    return best_sol

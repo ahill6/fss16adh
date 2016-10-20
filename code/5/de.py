@@ -2,34 +2,58 @@ from maxwalksat import Problem
 from copy import deepcopy
 from random import choice, random
 """
-1) import model (including setting all variables, constraints, objectives, bounds, et al.)
-2) make the DE basic operation
-3) 
-TODO - figure out how to find the "difference" between non-numeric values
-TODO - make a general <, >, <=, >=, bdom, cdom thing (i.e. set one variable/pass in "better w.r.t WHAT")
+Basic Differential Evolution implementation.
 """
 
+#helper methods
 def greaterthan(a, b):  return a > b
 def lessthan(a, b): return a < b
 def wrap(num, dec):    
     low, high = dec.low, dec.high
     return low if low==high else low + ((num - low) % (high - low))
 def cap(num, dec):  return max(dec.low, min(dec.high, num))
-"""
-def bdom(a, b):
-    adf
-def cdom(a, b):
-    adfasd
-"""
+
+def compare(problem, a, b):
+    """Returns True if a better than b by whatever measure (<, >, bdom, cdom).
+    Automatically selects bdom if numbers are not scalars or a list of length 1
+    (cdom not yet implemented).
+    """
+    a1 = problem.evaluate(problem, a)
+    b1 = problem.evaluate(problem, b)
+    if isinstance(a1, (list, tuple)) and len(a1) == 1:
+        a1 = a1[0]
+    if isinstance(b1, (list, tuple)) and len(b1) == 1:
+        b1 = b1[0]
+    try:
+        if isinstance(a1+0.0,float) and isinstance(b1+0.0,float):
+            return better(a1,b1)
+    except:
+        return bdom(a1, b1)
+
+def bdom(x, y):
+    """multi objective"""
+    betters = 0
+    if len(x) != len(y):
+        raise IndexError("Error, two items have different lengths",x,y)
+    for obj in xrange(len(x)):
+        if x[obj] < y[obj] : betters += 1 # need to generalize so it can also handle >
+        elif x[obj] != y[obj]: return False
+    return betters > 0
+
+# settings and variables for information    
 better = lessthan
 trim = cap
+counter = 0 # tracking program executions for debugging
+front_again_count = 0 # counting restarts for information
 
 def diffevolve(datafile):
     #import model
     problem = Problem(datafile)
+    
+    #set magic parameters
     max=100
     np=10*len(problem.decisions)
-    #better = problem.better # this assumes there is a single objective fitness function...which there better be or how are you evaluating things....?
+    #better = problem.better # not implemented
     f=0.75
     cf=0.3
     epsilon=0.01
@@ -40,31 +64,41 @@ def diffevolve(datafile):
     #go
     for k in range(max):
         total, n = next_generation(problem, f, cf, frontier)
-        print(total, n)
-        if total/n > (1-epsilon): # need to change this to allow bdom/cdom
+        """
+        if total/n > (1-epsilon): # need something that would work for bdom/cdom too for early out
             return frontier
-        #ideally put some type of intermediate output here
+        """
+    front_again_count = 0
+    counter = 0
     return frontier
 
 def next_generation(problem, f, cf, frontier, total=0.0, n=0):
+    """Calculates next generation"""
+    global front_again_count
     for x in frontier:
-        s   = problem.evaluate(problem, x)
         new = extrapolate(problem, frontier, x, f, cf)
-        if better(new.objectives, s):
-            x.objectives = deepcopy(new.objectives)
-            x.decisions  = deepcopy(new.decisions)
-        total += x.objectives[0] # this would need to change if >1 objective
-        n     += 1
+        if compare(problem, new, x):
+            if new not in frontier:
+                front_again_count += 1
+                x.objectives = deepcopy(new.objectives)
+                x.decisions  = deepcopy(new.decisions)
+        
+        total += x.objectives[0] # need a way to early out for multiple objectives
+        n = len(x.objectives)
     return total, n
 
 def extrapolate(problem, frontier,one,f,cf):
+    global counter
     cr = 0.5
-    # make a copy of what you have, pick one and know which one
+    retries = 5
+    
+    # pick one and know which one
     out = deepcopy(one)
+    counter += 1
     
     # pick three others
     two,three,four = threeOthers(frontier,one)
-    changed = False  
+    changed = False
     
     #mutate the decisions of the three you picked (de/rand/1)
     for d in range(len(frontier[0].decisions)):
@@ -76,22 +110,31 @@ def extrapolate(problem, frontier,one,f,cf):
         if not changed:
             rand = choice([two, three, four])
             out.decisions[d] = rand.decisions[d]
-        # I do problem.evaluate for this, but didn't pass in problem.
-        out.objectives = problem.evaluate(problem, out) # remember to score it
+        out.objectives = problem.evaluate(problem, out)
+        if not problem.is_valid(problem, out) and retries > 0:
+            d -= 1 # retry this one if mutation is invalid
+            retries -= 1
+    if retries <= 0:
+        print("WARNING - retries exceeded")
     return out
 
-def threeOthers(wholeset, leaveout): # figure out how to generalize this so it works whether or not you want some left out (this in fact only works if you want exactly one left out)
-    """
-    if 3 < len(wholeset) - len(leaveout):
-        raise Error("Fewer than three elements")
-    """
+def threeOthers(wholeset, leaveout=None): 
     def oneOther():
-        x = leaveout
-        while x in seen:
+        retries = len(wholeset) - 1 # if you've tried everything in the set and can't get a valid subset, give up. (this assumes small sets)
+        if len(seen) > 0:
+            x = seen[0]
+        while x in seen and retries > 0:
             x = choice(wholeset)
+            retries -= 1
+        if retries <= 0:
+            print(len(seen), len(wholeset), leaveout)
+            raise Exception("Pick three others failed.  Too many retries.")
+            
         seen.append(x)
         return x
+        
     seen = [leaveout]
+    #seen = [x for x in leaveout]
     a = oneOther()
     b = oneOther()
     c = oneOther()

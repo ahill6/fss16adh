@@ -1,7 +1,0 @@
-<problem>
-    <bound><var>x1</var><min>-5</min><max>5</max></bound>
-    <bound><var>x2</var><min>-5</min><max>5</max></bound>
-    <bound><var>x3</var><min>-5</min><max>5</max></bound>
-    <energy><function>(1 - (-10*math.e**(-0.2*math.sqrt(x1**2 + x2**2)) - 10*math.e**(-0.2*math.sqrt(x2**2 + x3**2)))) + (1 - (math.fabs(x1)**2 + 5*math.sin(x1)**3 + math.fabs(x2)**2 + 5*math.sin(x2)**3 + math.fabs(x3)**2 + 5*math.sin(x3)**3))</function><minimize>True</minimize></energy>
-    <omax>-300</omax>
-</problem>

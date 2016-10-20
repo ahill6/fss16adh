@@ -1,6 +1,7 @@
 from math import floor
 from collections import defaultdict
 from copy import deepcopy
+from scipy.stats import entropy
 import sys, os, numpy, csv, random, timeit
 
 # Helper methods
@@ -43,6 +44,27 @@ def csv_reader(filename):
     f = open(filename.split(".")[0]+"_stats.txt", 'w')
     f.write("lines\n"+str(len(data))+"\n")
     f.write("decisions\n"+str(len(data[0]))+"\n")
+    """
+    a = numpy.amin(data, axis=0)
+    b = numpy.amax(data, axis=0)
+    el = [d[15] for d in data]
+    print(numpy.unique(el))
+    split = []
+    for j in range(len(a)):
+        if j == 10:
+            split.append(.5)
+        else:
+            split.append(0)
+    wx=[numpy.dot(split, data[i]) for i in range(39)]
+    print(sum([entropy(i) for i in data]))
+    print(entropy(data[11]))
+    print(entropy(wx))
+    """
+    #print(entropy(pk=, qk=data[11]))
+    f.write("min\n" + numpy.amin(data, axis=0)+"\n")
+    f.write("max\n"+numpy.amax(data, axis=0)+"\n")
+    #f.write("counts\n"+u, indices = np.unique(data[j][:]))
+    #f.write("KL\n"+scipy.stats.entropy(pk=data, qk=numpy.dot(self.__w, data[i])))
     meds = numpy.median(data, axis=0)
     mins = numpy.amin(data, axis=0)
     maxs = numpy.amax(data, axis=0)
@@ -73,13 +95,18 @@ def csv_reader2(filename):
     maxs = numpy.amax(data, axis=0)
     stds = numpy.std(data, axis=0)
     cov = numpy.corrcoef(data, rowvar=0)
+    evals, evects = numpy.linalg.eig(cov)
+    ev = numpy.unique(evects)
+    data2 = numpy.dot(data, evects)
+    corr = numpy.corrcoef(data2, rowvar=0)
+    
     useless = set()
     #useless2 = [ind for ind, mn, md, mx, sd in enumerate(zip(mins,meds, maxs, stds)) if (md-md < sd) if (mx-md < sd)]
     #print(useless2)
     
     # HERE RUN THROUGH COVARIANCE AND FIGURE OUT WHO NEEDS TO GO
-    limit = .975
-    for j, row in enumerate(cov):
+    limit = .999
+    for j, row in enumerate(corr):
         useless.update([(i, j) for i, val in enumerate(row) if (val > limit and val != 1.0)])
     
     #print(useless)
@@ -96,7 +123,7 @@ def csv_reader2(filename):
 
     reduced = [[item[i] for i in xrange(len(item)) if i not in list(C)] for item in data]
     print(C)
-    return data, reduced, C
+    return data, data2, reduced
     
 def pretty_print(f, d):
     for k in sorted(d.keys()):
@@ -147,7 +174,7 @@ def summarize(txt):
 def make_stats(num_entries=None, num_decisions=None):
     path = '.'        
     #files = [f for f in os.listdir(path) if f.endswith('.txt') & (txt in f) & ('summary' not in f)]
-    files = [f for f in os.listdir(path) if f.endswith('.txt') if ("_" in f) if ('summary' not in f) if  ("stat" not in f)]
+    files = [f for f in os.listdir(path) if f.endswith('.txt') if ("_" in f) if ('summary' not in f) if  ("stat" not in f) if ('mcc' not in f)]
     timers = [f for f in os.listdir(path) if "." not in f]
     
     if len(files) > 0:
@@ -271,7 +298,7 @@ def table_please(num_entries=None, num_decisions=None, infile=None):
             dic[keys[-1]].append(value)
         """
     def medians(cin):
-        x,y,z = cin.split()
+        a,x,y,z,b = cin.split()
         e = [y, eval(z) - eval(x)]
         nested_set(results,[s,d,m], e)
     def stats(cin):
