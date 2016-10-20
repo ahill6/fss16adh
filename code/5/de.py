@@ -113,7 +113,6 @@ def extrapolate(problem, frontier,one,f,cf):
         out.objectives = problem.evaluate(problem, out)
         if not problem.is_valid(problem, out) and retries > 0:
             d -= 1 # retry this one if mutation is invalid
-            retries -= 1
     if retries <= 0:
         print("WARNING - retries exceeded")
     return out

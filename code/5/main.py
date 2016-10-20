@@ -19,7 +19,6 @@ def prettyprint(self):
 
 results = {}
 file = ['osyczka.xml', 'schaffer.xml', 'kursawe.xml', 'osyczka2.xml', 'kursawe2.xml']
-#file = ['schaffer.xml']
 method = [mws, annealer, diffevolve, pso]
 out = open('output.txt', 'w')
 for f in file:
@@ -31,12 +30,3 @@ for f in file:
         out.write("\n")
 print results
 out.close()
-#file = "osyczka.xml"
-#file = "schaffer.xml"
-#file = "kursawe2.xml"
-#print("\n",maxwalksat.mws(file))
-#print("\n",simulatedannealer.annealer(file))
-#print(de.diffevolve(file))
-#print("Done")
-#a = ['a','b','c',1,2,3]
-#print(de.threeOthers(a, ['a','b', 'c']))
