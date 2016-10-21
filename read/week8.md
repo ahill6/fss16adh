@@ -1,32 +1,32 @@
 ### i .Paper
-de Carvalho, Vinicius Renan, Silvia Regina Vergilio, and Aurora Pozo. "Uma hiper-heurıstica de seleç ao de meta-heurısticas para estabelecer sequências de módulos para o teste de software."
+Kumari, A. Charan, and K. Srinivas. "Hyper-heuristic approach for multi-objective software module clustering." Journal of Systems and Software 117 (2016): 384-401.
 
 ### ii. Keywords
-ii1: Choice Function - A function used to select which of several optimizers or optimizees will be used (e.g. use NSGA-II or SPEA-2, optimize hypervolume or RNI)
+ii1: Module Dependency Graphs (MDGs) - A graphical method of describing software modules (clusters of highly-interdependent code snippets)
 
-ii2: Multiobjective Optimization and Coupling-based Approach for the Integration and Test Order problem using Hyper Heuristics (MOCAITO-HH) - The algorithm suggested by the paper, which uses hyper-heuristics to decide which MOEA algorithm to use
+ii2: Modularization Quality (MQ) - A single measure combining coupling and cohesion in order to try to balance them so that excessive coupling is limited
 
-ii3: Hyper Heuristic - A choice of what meta-heuristic to use, or a heuristic for how to select heuristics.
+ii3: Maximizing Cluster Approach (MCA) - A clustering algorithm which seeks to maximize interdependence within clusters, minimize dependence between clusters, maximize the number of clusters and MQ, while minimizing isolated clusters.
 
-ii4: Ratio of Non-dominated Individuals (RNI) - The ratio nd/p where nd = number of non-dominated individuals and p = population size.  Can be used as a metric to be optimized or as a measure of algorithm effectiveness
+ii4: Equal-size Cluster Approach (ECA) - A clustering algorithm which seeks to minimize the difference between the maximum and minimum number of modules in a cluster, as well as all objectives of MCA (except minimizing isolated clusters)
 
 ### iii. A Few Notes
-iii1: Motivation - This paper seeks to automate the task of selecting the best meta-heuristic/algorithm to use in a given optimization program.  
+iii1: Motivation - This paper presents a new algorithm for clustering software modules to improve maintainability, as well as a tool built to demonstrate their algorithm.
 
-iii2: Related Work - The authors acknowledge this line of research goes back to 2001, and have a particularly detailed "Related Work" section detailing research in hyper-heuristics for 2012-2015.
+iii2: Related Work - The authors' related work section includes a summary of the development of their chosen fitness functions and a literature defense of their choice of metrics to compare algorithms.  It is thorough while also compact.
 
 iii3: New Results - The paper reports many new findings or suggestions, such as:
-+ The authors' MOCAITO-HH algorithm successfully replicates the performance of the best algorithm, and automatically selects which algorithm is appropriate to the situation
-+ As a means to the above goal, this paper presents a means of comparing algorithmic effectiveness across many quality measures
++ The authors' MHypEA algorithm finds solutions comparable to SA, NSGA-II, and Two-Archive algorithms on problems for which those are claimed to be best suited, at a reduction of nearly 95% in runtime.
++ The authors use their result to suggest hyper-heuristics as a means of making general-use algorithms capable of selecting the best metaheuristic for each problem automatically.
 
-iii4: Future Work - This algorithm needs to be applied to more test cases, and the authors mention that they would like to try other Choice Functions.
+iii4: Future Work - The authors only real-world datasets were MDGs without edge weights.  This is because they could not convince an author with an edge-weighted dataset to let them use it and generated simulated data instead.  Still, validating their results on MDGs with edge weights is needed.
 
 ### iv. Weaknesses
-iv1: Little Analysis - The choice function and rest of the algorithm are both rather complex, but the paper never addresses how each part contributes.  It is possible only one portion of the algorithm is what is accomplishing the results, but without analysis of it, that is left unexplored.
+iv1: Poorly Organized and Overwhelming Data - One positive of this paper is that it makes extensive use of data.  Every claim is supported by some discussion of data or statistical test, and much of the data is provided in the paper itself.  That being said, the data is not presented in a way which is easy to read.  There are nearly 11 pages of graphs/charts/screenshots in a 15 page paper (not including reference section).  About 7 of those pages should have been made available on github rather than cluttering the paper with unnecessary information.
 
-iv2: Few Test Cases - The paper's results are only for four test cases.  More evidence from more varied sources is needed.
+iv2: Overstating Results - The paper supports every claim with data.  However, the interpretation of the data sometimes neglects to mention that the difference is a small effect or overstates the implications for industry of a difference which is barely sufficient to be statistically significant.
 
-iv3: Magic Parameters - The authors' algorithm requires magic parameters, which they set by trial-and-error.
+iv3:  - The authors' algorithm requires magic parameters, which they set by trial-and-error.
 
 ### v. Connection To Other Papers
-This paper is a response to the base paper calling for more studies in the usefulness of hyper-heuristics to SBSE.
+This paper is a response to the base paper calling for more studies in the usefulness of hyper-heuristics to SBSE.  In fact, the authors explicitly mention the base paper as their inspiration their technique.
