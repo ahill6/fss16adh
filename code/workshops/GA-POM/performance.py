@@ -132,10 +132,7 @@ def eucledian(one, two):
   :return:
   """
   # TODO 5: Code up the eucledian distance. https://en.wikipedia.org/wiki/Euclidean_distance
-  dist = 0
-  #return (sum([(o-t)**2 for o,t in zip(one, two)]))**0.5
-  dist = distance.euclidean(one,two)
-  return dist
+  return sum([(o-t)**2 for o, t in zip(one, two)])
 
 def sort_solutions(solutions):
   """
@@ -193,7 +190,7 @@ def igd(obtained, ideals):
   """
   # TODO 7: Compute the value of IGD using the definition defined in the previous cell.
   ## 2-0, 4-2, 5-1, 9-1
-  return (sum([closest(ideal, obtained)[0] for ideal in ideals]))/len(obtained)
+  return sum([closest(got, ideals)[0] for got in obtained])/len(obtained)
 
 ref = make_reference(problem, tests[5][0], tests[10][0], tests[50][0])
 
