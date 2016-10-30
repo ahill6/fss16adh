@@ -1,4 +1,4 @@
-from maxwalksat import Problem
+from structures import Problem
 from copy import deepcopy
 from random import choice, random
 """
@@ -18,25 +18,26 @@ def compare(problem, a, b):
     Automatically selects bdom if numbers are not scalars or a list of length 1
     (cdom not yet implemented).
     """
-    a1 = problem.evaluate(problem, a)
-    b1 = problem.evaluate(problem, b)
+    a1 = problem.evaluate(a).objectives
+    b1 = problem.evaluate(b).objectives
     if isinstance(a1, (list, tuple)) and len(a1) == 1:
         a1 = a1[0]
     if isinstance(b1, (list, tuple)) and len(b1) == 1:
         b1 = b1[0]
     try:
         if isinstance(a1+0.0,float) and isinstance(b1+0.0,float):
-            return better(a1,b1)
+            return better(problem, a1,b1)
     except:
-        return bdom(a1, b1)
+        return bdom(problem, a1, b1)
 
-def bdom(x, y):
+def bdom(problem, x, y):
     """multi objective"""
     betters = 0
     if len(x) != len(y):
         raise IndexError("Error, two items have different lengths",x,y)
     for obj in xrange(len(x)):
-        if x[obj] < y[obj] : betters += 1 # need to generalize so it can also handle >
+        bdombetter = lessthan if problem.objectives[obj].do_minimize else greaterthan
+        if bdombetter(x[obj], y[obj]): betters += 1
         elif x[obj] != y[obj]: return False
     return betters > 0
 
@@ -46,9 +47,9 @@ trim = cap
 counter = 0 # tracking program executions for debugging
 front_again_count = 0 # counting restarts for information
 
-def diffevolve(datafile):
+def diffevolve(datafile, num_players=0):
     #import model
-    problem = Problem(datafile)
+    problem = Problem(datafile, num_players)
     
     #set magic parameters
     max=100
@@ -59,11 +60,12 @@ def diffevolve(datafile):
     epsilon=0.01
     
     #generate initial population
-    frontier = [problem.generate_one() for _ in range(np)] 
+    frontier = problem.generate_pop(np) 
     
     #go
     for k in range(max):
-        total, n = next_generation(problem, f, cf, frontier)
+        #total, n = next_generation(problem, f, cf, frontier)
+        next_generation(problem, f, cf, frontier)
         """
         if total/n > (1-epsilon): # need something that would work for bdom/cdom too for early out
             return frontier
@@ -78,14 +80,14 @@ def next_generation(problem, f, cf, frontier, total=0.0, n=0):
     for x in frontier:
         new = extrapolate(problem, frontier, x, f, cf)
         if compare(problem, new, x):
-            if new not in frontier:
+            if new not in frontier and problem.is_valid(problem, new):
                 front_again_count += 1
                 x.objectives = deepcopy(new.objectives)
                 x.decisions  = deepcopy(new.decisions)
         
-        total += x.objectives[0] # need a way to early out for multiple objectives
-        n = len(x.objectives)
-    return total, n
+        #total += x.objectives[0] # need a way to early out for multiple objectives
+        #n = len(x.objectives)
+    #return total, n
 
 def extrapolate(problem, frontier,one,f,cf):
     global counter
@@ -110,7 +112,7 @@ def extrapolate(problem, frontier,one,f,cf):
         if not changed:
             rand = choice([two, three, four])
             out.decisions[d] = rand.decisions[d]
-        out.objectives = problem.evaluate(problem, out)
+        out = problem.evaluate(out)
         if not problem.is_valid(problem, out) and retries > 0:
             d -= 1 # retry this one if mutation is invalid
     if retries <= 0:

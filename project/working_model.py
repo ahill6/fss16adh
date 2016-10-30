@@ -1,4 +1,8 @@
 from structures import Problem
+from maxwalksat import mws
+from simulatedannealer import annealer
+from de import diffevolve
+from particleswarm import pso
 
 class O:
     """
@@ -39,9 +43,20 @@ class Company(O):
     
 
 # read file and make company
-filename = "specialization.xml"
+"""
+filename = "round1.xml"
 problem = Problem(filename)
 current_sol = problem.generate_one()
 print(current_sol)
+"""
+
+filename = "round1.xml"
+results = {}
+method = [diffevolve]
+#out = open('output.txt', 'w')
+
+for m in method:
+  results[str(m)] = m(filename,1) # added a second argument of number of companies.  Maybe will work with everyone since added in structures?
+print results
     
 # use different optimizers to attempt to optimize the problem

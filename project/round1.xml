@@ -1,0 +1,23 @@
+<problem>
+    <bound><var>new_feature_effort</var><min>0</min><max>100</max></bound>
+    <bound><var>catchup_feature_effort</var><min>0</min><max>100</max></bound>
+    <constraint>new_feature_effort + catchup_feature_effort &lt;= 100</constraint>
+    <constraint>0 &lt;= len(sol.features - sol.old_features) &lt;= 2</constraint>
+    <energy><function>len(sol.features - sol.opponent_features)</function><minimize>False</minimize></energy>
+    <energy><function>len(sol.opponent_features - sol.features)</function><minimize>True</minimize></energy>
+    <energy><function>100 - (new_feature_effort + catchup_feature_effort)</function><minimize>False</minimize></energy>
+    <feature><name>a</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>b</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>c</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>d</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>e</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>f</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>h</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>i</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>j</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>k</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>l</name><cost>1</cost><payoff>1</payoff></feature>
+    <feature><name>m</name><cost>1</cost><payoff>1</payoff></feature>
+    <omax>300</omax>
+    <evaluationMethod>model_evaluate</evaluationMethod>
+</problem>
