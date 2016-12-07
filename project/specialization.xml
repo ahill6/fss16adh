@@ -1,7 +1,0 @@
-<problem>
-    <bound><var>a</var><min>0</min><max>100</max></bound>
-    <bound><var>b</var><min>0</min><max>50</max></bound>
-    <constraint>1.1*a + 1.5*b &lt;= 100</constraint>
-    <energy><function>a + 2*b</function><minimize>False</minimize></energy>
-    <omax>300</omax>
-</problem>
