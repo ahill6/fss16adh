@@ -1,81 +1,31 @@
-from structures2 import Problem
 from copy import deepcopy
 from random import choice, random
 """
 Basic Differential Evolution implementation.
 """
 
-#helper methods
-def greaterthan(a, b):  return a > b
-def lessthan(a, b): return a < b
-def wrap(num, dec):    
-    low, high = dec.low, dec.high
-    return low if low==high else low + ((num - low) % (high - low))
-def cap(num, dec):  return max(dec.low, min(dec.high, num))
-
-def compare(problem, a, b):
-    """Returns True if a better than b by whatever measure (<, >, bdom, cdom).
-    Automatically selects bdom if numbers are not scalars or a list of length 1
-    (cdom not yet implemented).
-    """
-    #a1 = problem.evaluate_for_real(a).objectives
-    #b1 = problem.evaluate_for_real(b).objectives
-    a1 = problem.evaluate(a).objectives
-    b1 = problem.evaluate(b).objectives
-    if isinstance(a1, (list, tuple)) and len(a1) == 1:
-        a1 = a1[0]
-    if isinstance(b1, (list, tuple)) and len(b1) == 1:
-        b1 = b1[0]
-    try:
-        if isinstance(a1+0.0,float) and isinstance(b1+0.0,float):
-            return better(problem, a1,b1)
-    except:
-        return bdom(problem, a1, b1)
-
-def bdom(problem, x, y):
-    """multi objective"""
-    betters = 0
-    if len(x) != len(y):
-        raise IndexError("Error, two items have different lengths",x,y)
-    for obj in xrange(len(x)):
-        bdombetter = lessthan if problem.objectives[obj].do_minimize else greaterthan
-        if bdombetter(x[obj], y[obj]): betters += 1
-        elif x[obj] != y[obj]: return False
-    return betters > 0
-
-# settings and variables for information    
-better = lessthan
-trim = cap
-counter = 0 # tracking program executions for debugging
-front_again_count = 0 # counting restarts for information
-
-def diffevolve(datafile, num_players=0):
-    #import model
-    problem = Problem(datafile, num_players)
+def de(problem, initial_population):
     
     #set magic parameters
-    max=100
+    rounds=100
     np=10*len(problem.decisions)
     #better = problem.better # not implemented
-    f=0.75
+    f=0.75 # TODO - look up if the magic parameters are supposed to be set relative to the # of decisions or something (i.e. do these need to change)
     cf=0.3
     epsilon=0.01
     
     #generate initial population
-    frontier = problem.generate_pop(np) 
+    frontier = initial_population 
     
     #go
-    for k in range(max):
-        #total, n = next_generation(problem, f, cf, frontier)
+    for k in range(rounds):
         next_generation(problem, f, cf, frontier)
-        """
-        if total/n > (1-epsilon): # need something that would work for bdom/cdom too for early out
-            return frontier
+        #total, n = next_generation(problem, f, cf, frontier)
+        """ABOVE - only setting equal to something if have an early-out condition
+        implement some kind of early-out having to do with change from last generation?
         """
     front_again_count = 0
     counter = 0
-    for f in frontier:
-        f = problem.evaluate_for_real(f)
     return frontier
 
 def next_generation(problem, f, cf, frontier, total=0.0, n=0):
@@ -83,12 +33,12 @@ def next_generation(problem, f, cf, frontier, total=0.0, n=0):
     global front_again_count
     for x in frontier:
         new = extrapolate(problem, frontier, x, f, cf)
-        if compare(problem, new, x):
-            if new not in frontier and problem.is_valid(problem, new):
+        if compare(problem, new, x): # TODO - figure out where elitism works and whether I need to make a "better" in problem....
+            if new not in frontier:
                 front_again_count += 1
                 x.objectives = deepcopy(new.objectives)
                 x.decisions  = deepcopy(new.decisions)
-        
+        """The below items can be added again if an early-out thing is implemented"""
         #total += x.objectives[0] # need a way to early out for multiple objectives
         #n = len(x.objectives)
     #return total, n
@@ -107,8 +57,7 @@ def extrapolate(problem, frontier,one,f,cf):
     changed = False
     
     #mutate the decisions of the three you picked (de/rand/1)
-    for d in range(len(one.decisions)):
-        changed = False
+    for d in range(len(frontier[0].decisions)):
         x,y,z = two.decisions[d], three.decisions[d], four.decisions[d]
         if random() < cr:
             changed = True
@@ -117,10 +66,9 @@ def extrapolate(problem, frontier,one,f,cf):
         if not changed:
             rand = choice([two, three, four])
             out.decisions[d] = rand.decisions[d]
-        out.objectives = problem.evaluate(out)
+        out.objectives = problem.evaluate(problem, out) #TODO - will evaluate move to factory?
         if not problem.is_valid(problem, out) and retries > 0:
             d -= 1 # retry this one if mutation is invalid
-            retries -= 1
     if retries <= 0:
         print("WARNING - retries exceeded")
     return out

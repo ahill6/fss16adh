@@ -1,0 +1,39 @@
+Online (5 objectives) - took away idle and completion and cdom fell greatly
+
+*** IGD ***
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                     de , 4081237 , 1878248 
+2 ,                    pso , 4609130 , 1177222 
+3 ,               sampling , 7738308 , 694420 
+4 ,                 cdomga , 9606050 , 1018913 
+
+*** Spread ***
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,               sampling ,   23 ,   12 
+1 ,                    pso ,   27 ,    4 
+2 ,                 cdomga ,  101 ,    2 
+3 ,                     de ,  104 ,   20 
+
+*** Times ***
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                    pso ,  369 ,   11 
+2 ,                     de , 1108 ,   73 
+3 ,               sampling , 4550 ,  328 
+4 ,                 bdomga , 51766 , 6580 
+5 ,                 cdomga , 60472 , 6856 
+
+To run the whole simulation ONE TIME (
+pso:      4 seconds     (30 + method (3000)) - each of 30 is replaced (or at least replacement evaluated) 100 times + 30 initially
+de:       11 seconds    (110 + method(11000)) - each of 110 is updated 100 times (potentially more because evaluate called before valid check)
+sampling: 45 seconds    (500 + elitism)
+bdom:     8.6 minutes   (10,000 + elitism)
+cdom:     10 minutes    (10,000 + elitism)
+
+TOTAL:
+PSO - 3030 + 1 elitism on 30
+DE  - 11,110 + 1 elitism on 110
+SAMP- 500 + 1 elitism on 500
+GAs - 10,000 + 10 elitisms on 200, 1 elitism on 100

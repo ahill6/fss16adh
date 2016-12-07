@@ -1,0 +1,55 @@
+REMEMBER THESE ARE ALL POP0 / MY THING
+SO want cost > 1
+want value < 1
+want score < 1 
+want completion < 1
+want idle > 1
+want revenue < 1
+
+IMPROVES OF Cost - high good
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                    pso ,   .74 ,   83 
+2 ,                     de ,  1.31 ,  146 
+3 ,               sampling ,  7.64 ,  857 
+4 ,                 cdomga , 18.29 , 2051 
+
+IMPROVES OF Value - low good
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                     de ,   .93 ,   45 
+1 ,                    pso ,  1.04 ,   51 
+2 ,               sampling ,  1.11 ,   53 
+2 ,                 cdomga ,  1.21 ,   58 
+
+IMPROVES OF Score - low good
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                 cdomga ,  .09 ,    7 
+1 ,               sampling ,   .11 ,    8 
+2 ,                     de ,   .70 ,   51 
+2 ,                    pso ,   .76 ,   55 
+
+IMPROVES OF Completion - low good
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                 cdomga ,   .36 ,    9 
+2 ,               sampling ,   .43 ,   11 
+3 ,                     de ,   .87 ,   22 
+4 ,                    pso ,  1.02 ,   26 
+
+IMPROVES OF Idle - high good
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                    pso ,   .62 ,  115 
+1 ,                     de ,   .80 ,  149 
+2 ,               sampling ,  2.99 ,  558 
+2 ,                 cdomga ,  4.18 ,  779 
+
+IMPROVES OF Revenue - low good
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                 cdomga ,   .39 ,    5 
+2 ,               sampling ,   .46 ,    6 
+3 ,                     de ,   .99 ,   13 
+4 ,                    pso ,  1.10 ,   15 

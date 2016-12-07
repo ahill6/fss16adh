@@ -1,0 +1,96 @@
+INITIAL/FINAL SO...
+IMPROVEMENTS FOR VARIABLE 0 - cost WANT > 1
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                    pso ,   69 ,  177 
+2 ,                     de ,  109 ,  306 
+3 ,       adaptiveSampling ,  316 ,  795 
+4 ,               sampling ,  395 ,  892 
+5 ,                 cdomga , 2184 , 4501 
+
+IMPROVEMENTS FOR VARIABLE 1 - value WANT < 1
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                     de ,  105 ,   48 
+2 ,                    pso ,  106 ,   53 
+2 ,       adaptiveSampling ,  108 ,   45 
+2 ,                 cdomga ,  112 ,   64 
+3 ,               sampling ,  121 ,   48 
+
+IMPROVEMENTS FOR VARIABLE 2 - score WANT < 1
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                 cdomga ,   13 ,   12 
+2 ,               sampling ,   24 ,   18 
+3 ,       adaptiveSampling ,   33 ,   28 
+4 ,                     de ,   90 ,   64 
+5 ,                    pso ,  117 ,   94 
+
+IMPROVEMENTS FOR VARIABLE 3 - profit WANT < 1
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                 cdomga ,   35 ,    6 
+2 ,               sampling ,   40 ,    8 
+3 ,       adaptiveSampling ,   45 ,   13 
+4 ,                     de ,   85 ,   33
+5 ,                    pso ,  105 ,   57 
+
+IMPROVEMENTS FOR VARIABLE 4 - market share WANT < 1
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                     de ,   71 ,  195 
+2 ,                    pso ,  121 ,  564 
+3 ,       adaptiveSampling , 14091 , 5756884 
+4 ,               sampling , 525615 , 121741627 
+5 ,                 cdomga , 18646933145904 , 277391975872109296 
+-------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------
+RUNTIME - WANT small
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                    pso , 13.37 ,  3.00 
+2 ,                   pop0 , 32.78 ,  4.00 
+2 ,       adaptiveSampling , 33.15 ,  6.20 
+3 ,                     de , 43.39 ,  6.61 
+4 ,               sampling , 177.83 , 20.01 
+5 ,                 cdomga , 2186.37 , 363.23 
+
+
+*** SPREADS *** - WANT small
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,       adaptiveSampling ,   14 ,   17  ++ somewhat artificial, I make 10 groups not within epsilon, then pick one from each
+2 ,               sampling ,   24 ,    7 
+2 ,                    pso ,   30 ,    5 
+3 ,                     de ,  100 ,   16 
+3 ,                 cdomga ,  103 ,    3 
+
+*** NORMALIZED SPREADS *** - WANT small
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,       adaptiveSampling ,  100 ,    0 
+1 ,                     de ,  100 ,    0 
+1 ,                    pso ,  100 ,    0 
+1 ,               sampling ,  100 ,    1 
+1 ,                 cdomga ,  100 ,    8 
+
+*** IGDS *** - want small
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                    pso , 6077962 , 2591249 
+2 ,                   pop0 , 6552708 , 1523049 
+3 ,                     de , 7836541 , 1495835 
+4 ,                 cdomga , 9129574 , 222143 
+5 ,       adaptiveSampling , 9927816 , 1642576 
+5 ,               sampling , 10043565, 1486190 
+
+
+
+*** NORMALIZED IGDS *** - want small
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                     de ,   97 ,   66 
+1 ,                    pso ,   97 ,   83 
+1 ,       adaptiveSampling ,  238 , 1333 
+1 ,               sampling ,  530 , 3075 
+2 ,                 cdomga , 2013 , 18250 

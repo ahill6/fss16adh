@@ -1,0 +1,35 @@
+With 5 methods and 6 variables
+
+*** IGD ***
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                 bdomga , 1270 , 1656 
+1 ,                 cdomga , 2083 , 4216 
+2 ,               sampling , 116513 , 269849 
+3 ,                     de , 3351714 , 2520943 
+3 ,                    pso , 5183737 , 2642913 
+
+*** Spread ***
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,               sampling ,   18 ,    3 
+2 ,                    pso ,   30 ,    9 
+3 ,                     de ,   98 ,    8 
+3 ,                 bdomga ,  100 ,    1 
+4 ,                 cdomga ,  119 ,   24 
+
+*** Times ***
+rank ,                   name ,    med   ,  iqr 
+----------------------------------------------------
+1 ,                    pso ,  369 ,   11 
+2 ,                     de , 1108 ,   73 
+3 ,               sampling , 4550 ,  328 
+4 ,                 bdomga , 51766 , 6580 
+5 ,                 cdomga , 60472 , 6856 
+
+To run the whole simulation ONE TIME (
+pso:      4 seconds     (30 + method)
+de:       11 seconds    (60 + method)
+sampling: 45 seconds    (500 + elitism)
+bdom:     8.6 minutes   (10,000 + elitism)
+cdom:     10 minutes    (10,000 + elitism)

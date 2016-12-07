@@ -1,10 +1,13 @@
 <problem>
     <bound><var>new_feature_effort</var><min>0</min><max>100</max></bound>
     <bound><var>catchup_feature_effort</var><min>0</min><max>100</max></bound>
-    <constraint>new_feature_effort + catchup_feature_effort &lt;= 100</constraint>
-    <constraint>0 &lt;= len(sol.features - sol.old_features) &lt;= 4</constraint>
-    <energy><function>len(sol.features - sol.opponent_features)</function><minimize>False</minimize></energy>
-    <energy><function>len(sol.opponent_features - sol.features)</function><minimize>True</minimize></energy>
+    <bound><var>TTM</var><min>-100</min><max>0</max></bound>
+    <constraint>new_feature_effort + catchup_feature_effort - TTM &lt;= 100</constraint>
+    <constraint>0 &lt;= len(sol.features - sol.old_features) &lt;= len(sol.old_features)</constraint>
+    <energy><function>len(sol.features - sol.opponent_features)</function><minimize>False</minimize><granularity>1</granularity></energy>
+    <energy><function>len(sol.opponent_features - sol.features)</function><minimize>True</minimize><granularity>1</granularity></energy>
+    <energy><function>TTM*2</function><minimize>True</minimize><granularity>1</granularity></energy>
+    <energy><function>100 - new_feature_effort - catchup_feature_effort + TTM</function><minimize>False</minimize><granularity>1</granularity></energy>
     <feature><name>a</name><cost>1</cost><payoff>1</payoff></feature>
     <feature><name>b</name><cost>1</cost><payoff>1</payoff></feature>
     <feature><name>c</name><cost>1</cost><payoff>1</payoff></feature>
